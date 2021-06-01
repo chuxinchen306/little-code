@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Scanner;
 
 /**
  * @author: chenchuxin
@@ -24,14 +25,12 @@ public class TimeServerHandler implements Runnable {
             out = new PrintWriter(this.socket.getOutputStream(), true);
             String currentTime = null;
             String body = null;
+            Scanner scanner = new Scanner(System.in);
             while (true) {
                 body = in.readLine();
-                if (body == null) {
-                    break;
-                }
                 System.out.println("The time server receive order : " + body);
-                currentTime = "QUERY TIME ORDER".equalsIgnoreCase(body) ? new java.util.Date(System.currentTimeMillis()).toString() : "BAD ORDER";
-                out.println(currentTime);
+                String s = scanner.next();
+                out.println(s);
             }
         } catch (Exception e) {
             if (in != null) {

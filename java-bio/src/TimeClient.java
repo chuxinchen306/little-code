@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Scanner;
 
 /**
  * @author: chenchuxin
@@ -25,10 +26,15 @@ public class TimeClient {
             socket = new Socket("127.0.0.1", port);
             bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             printWriter = new PrintWriter(socket.getOutputStream(), true);
-            printWriter.println("QUERY TIME ORDER");
-            System.out.println("Send order 2 server succeed.");
-            String resp = bufferedReader.readLine();
-            System.out.println("Now is : " + resp);
+            Scanner scanner = new Scanner(System.in);
+            while (true) {
+                String s = scanner.next();
+                printWriter.println(s);
+                String resp = bufferedReader.readLine();
+                System.out.println("Now is : " + resp);
+            }
+
+
         } catch (Exception e) {
 
         } finally {
