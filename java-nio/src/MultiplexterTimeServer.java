@@ -7,7 +7,6 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
-import java.util.Scanner;
 import java.util.Set;
 
 /**
@@ -85,7 +84,6 @@ public class MultiplexterTimeServer implements Runnable {
                     String body = new String(bytes, StandardCharsets.UTF_8);
                     System.out.println("The time server receive order :" + body);
 
-                    doWrite(sc);
                 } else if (readBytes < 0) {
                     key.cancel();
                     sc.close();
@@ -97,24 +95,16 @@ public class MultiplexterTimeServer implements Runnable {
 
     }
 
-    private void doWrite(SocketChannel socketChannel) throws IOException {
-        Scanner scanner = new Scanner(System.in);
-        String s = "";
-        while (!s.equals("q")) {
-            System.out.println("response to them");
 
-            s = scanner.next();
-            if (!s.equals("q")) {
-                byte[] bytes = s.getBytes();
-                ByteBuffer byteBuffer = ByteBuffer.allocate(bytes.length);
-                byteBuffer.put(bytes);
-                byteBuffer.flip();
-                socketChannel.write(byteBuffer);
-            }
-        }
-
-
+    public Selector getSelector() {
+        return selector;
     }
 
+    public ServerSocketChannel getSocketChannel() {
+        return socketChannel;
+    }
 
+    public boolean isStop() {
+        return stop;
+    }
 }

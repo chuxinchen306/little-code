@@ -12,6 +12,8 @@ public class TimeClient {
 
             }
         }
-        new Thread(new TimeClientHandler("127.0.0.1", port), "TimeClient-001").start();
+        TimeClientHandler timeClientHandler = new TimeClientHandler("127.0.0.1", port);
+        new Thread(timeClientHandler, "TimeClient-001").start();
+        new Thread(new ClientWriter(timeClientHandler), "ClientWriter-002").start();
     }
 }

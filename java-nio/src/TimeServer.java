@@ -15,6 +15,10 @@ public class TimeServer {
             }
         }
         MultiplexterTimeServer multiplexterTimeServer = new MultiplexterTimeServer(port);
+        // 读线程
         new Thread(multiplexterTimeServer, "Nio-MultiplexterTimeServer-001").start();
+        ServerWriteHandler serverWriteHandler = new ServerWriteHandler(multiplexterTimeServer);
+        // 写线程
+        new Thread(serverWriteHandler, "NIO-writeServer-001").start();
     }
 }

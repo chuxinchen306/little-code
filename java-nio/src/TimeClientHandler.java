@@ -6,7 +6,6 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
-import java.util.Scanner;
 import java.util.Set;
 
 /**
@@ -82,7 +81,7 @@ public class TimeClientHandler implements Runnable {
             if (key.isConnectable()) {
                 if (sc.finishConnect()) {
                     sc.register(selector, SelectionKey.OP_READ);
-                    doWrite(sc);
+
                 } else {
                     System.exit(1);
                 }
@@ -95,8 +94,8 @@ public class TimeClientHandler implements Runnable {
                     byte[] bytes = new byte[byteBuffer.remaining()];
                     byteBuffer.get(bytes);
                     String body = new String(bytes, StandardCharsets.UTF_8);
-                    System.out.println("Now is : " + body);
-                    doWrite(sc);
+                    System.out.println(body);
+
                 } else if (readBytes < 0) {
                     key.cancel();
                     sc.close();
@@ -111,33 +110,42 @@ public class TimeClientHandler implements Runnable {
     private void doConnect() throws IOException {
         if (socketChannel.connect(new InetSocketAddress(host, port))) {
             socketChannel.register(selector, SelectionKey.OP_READ);
-            doWrite(socketChannel);
+
         } else {
             socketChannel.register(selector, SelectionKey.OP_CONNECT);
         }
     }
 
-    private void doWrite(SocketChannel socketChannel) throws IOException {
-        Scanner scanner = new Scanner(System.in);
 
-        String s = "";
-        while (!s.equals("q")) {
-            System.out.println("Please say someThing");
-
-            s = scanner.next();
-            if (!s.equals("q")) {
-                byte[] req = s.getBytes();
-                ByteBuffer writeBuffer = ByteBuffer.allocate(req.length);
-                writeBuffer.put(req);
-                writeBuffer.flip();
-                socketChannel.write(writeBuffer);
-                if (!writeBuffer.hasRemaining()) {
-                    System.out.println("Send order 2 server succeed.");
-                }
-            }
-        }
-
-
+    public String getHost() {
+        return host;
     }
 
+    public int getPort() {
+        return port;
+    }
+
+    public Selector getSelector() {
+        return selector;
+    }
+
+    public void setSelector(Selector selector) {
+        this.selector = selector;
+    }
+
+    public SocketChannel getSocketChannel() {
+        return socketChannel;
+    }
+
+    public void setSocketChannel(SocketChannel socketChannel) {
+        this.socketChannel = socketChannel;
+    }
+
+    public boolean isStop() {
+        return stop;
+    }
+
+    public void setStop(boolean stop) {
+        this.stop = stop;
+    }
 }
