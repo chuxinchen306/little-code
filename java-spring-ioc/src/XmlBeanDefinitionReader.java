@@ -67,7 +67,8 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
                                         + name + "' must specify a ref or value");
 
                     }
-
+                    BeanReference beanRef = new BeanReference(name);
+                    beanDefinition.getPropertyValues().addPropertyValue(new PropertyValue(name, beanRef));
                 }
             }
         }
